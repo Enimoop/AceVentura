@@ -36,11 +36,10 @@ BACKGROUND_MENU_SIZE = (700, 600)
 # Définir la position de l'image de fond du menu
 BACKGROUND_MENU_POSITION = (290, 100)
 
+#Marche pas ptn  >:\
 TRANSITION_SPEED = 10  # Change this value to control the transition speed
 TRANSITION_STOP = 100  # Change this value to control where the buttons stop
 TRANSITION_DISTANCE = 1010  # Change this value to control the transition distance
-
-
 
 
 # Charger l'image d'arrière-plan
@@ -67,7 +66,6 @@ font = pygame.font.Font(mainMenuFont, 55)
 # Définir si l'animation de transition est en cours
 transitioning = False
 
-
 class Button:
     def __init__(self, text, y, font_path, action=None, x_offset=0):
         self.text = text
@@ -76,13 +74,13 @@ class Button:
         self.font_normal = pygame.font.Font(font_path, FONT_SIZE_NORMAL)
         self.font_zoomed = pygame.font.Font(font_path, FONT_SIZE_ZOOMED)
         text_surface = self.font_normal.render(self.text, True, TEXT_COLOR)
-        self.w, self.h = text_surface.get_size()  # Get the size of the text
-        self.w += 20  # Add some padding
-        self.h += 20  # Add some padding
-        self.stop = None  # The stop position will be set when the transition starts
+        self.w, self.h = text_surface.get_size()  
+        self.w += 20  
+        self.h += 20  
+        self.stop = None  
         self.x = SCREEN_SIZE[0] / 2 - self.w / 2 + x_offset
         self.initial_x = self.x
-        self.start_x = self.x  # Ne pas ajouter x_offset ici
+        self.start_x = self.x  
 
 
 
@@ -96,9 +94,9 @@ class Button:
             font = self.font_normal
 
         text_surface = font.render(self.text, True, TEXT_COLOR)
-        self.w, self.h = text_surface.get_size()  # Get the size of the text
-        self.w += 20  # Add some padding
-        self.h += 20  # Add some padding
+        self.w, self.h = text_surface.get_size()  
+        self.w += 20  
+        self.h += 20 
         if transitioning:
                 if self.stop is None:
                     self.stop = self.start_x + TRANSITION_DISTANCE if self.action == retour else self.start_x - TRANSITION_DISTANCE
@@ -151,7 +149,7 @@ def parametres():
     global transitioning
     transitioning = True
     for button in menu_items:
-        button.stop = button.start_x - TRANSITION_DISTANCE  # Calcule la nouvelle position d'arrêt
+        button.stop = button.start_x - TRANSITION_DISTANCE  
     print("Paramètres")
     print("Transitioning: ", transitioning)
 
@@ -165,7 +163,7 @@ def retour():
     global transitioning
     transitioning = True
     for button in menu_items:
-        button.stop = button.start_x + TRANSITION_DISTANCE  # Calcule la nouvelle position d'arrêt
+        button.stop = button.start_x + TRANSITION_DISTANCE  
     print("Retour")
     print("Transitioning: ", transitioning)
 
@@ -175,7 +173,7 @@ menu_items = [
     Button("Jouer", SCREEN_SIZE[1] / 2 - MESSAGE_SPACING, mainMenuFont, jouer),
     Button("Paramètres", SCREEN_SIZE[1] / 2 , mainMenuFont, parametres),
     Button("Quitter", SCREEN_SIZE[1] / 1.9 + MESSAGE_SPACING, mainMenuFont, quitter),
-    Button("Retour", SCREEN_SIZE[1] / 1.9 + MESSAGE_SPACING, mainMenuFont, retour, x_offset=1000)  # Add an x_offset to move the button to the right
+    Button("Retour", SCREEN_SIZE[1] / 1.9 + MESSAGE_SPACING, mainMenuFont, retour, x_offset=1000)  
 ]
 # Boucle principale
 while True:
