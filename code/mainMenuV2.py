@@ -65,10 +65,10 @@ class Button:
         self.font_normal = pygame.font.Font(font_path, FONT_SIZE_NORMAL)
         self.font_zoomed = pygame.font.Font(font_path, FONT_SIZE_ZOOMED)
         text_surface = self.font_normal.render(self.text, True, TEXT_COLOR)
-        self.w, self.h = text_surface.get_size()  # Get the size of the text
-        self.w += 20  # Add some padding
-        self.h += 20  # Add some padding
-        self.x = SCREEN_SIZE[0] / 2 - self.w / 2  # Center the button
+        self.w, self.h = text_surface.get_size()  
+        self.w += 20  
+        self.h += 20 
+        self.x = SCREEN_SIZE[0] / 2 - self.w / 2  
 
     def draw(self, surface, mouse_x, mouse_y, pressed):
         zoom = self.mouse_over_button(mouse_x, mouse_y)
@@ -80,25 +80,20 @@ class Button:
             font = self.font_normal
 
         text_surface = font.render(self.text, True, TEXT_COLOR)
-        self.w, self.h = text_surface.get_size()  # Get the size of the text
-        self.w += 20  # Add some padding
-        self.h += 20  # Add some padding
-        self.x = SCREEN_SIZE[0] / 2 - self.w / 2  # Center the button
+        self.w, self.h = text_surface.get_size()  
+        self.w += 20  
+        self.h += 20  
+        self.x = SCREEN_SIZE[0] / 2 - self.w / 2 
 
         def draw_button(text, font, color, surface, x, y, w, h, press):
-            # Create a new surface with the same size as the button
             button_surface = pygame.Surface((w, h))
             
-            # Set the opacity of the surface
             button_surface.set_alpha(BUTTON_OPACITY)
             
-            # Draw the rectangle on the new surface
             pygame.draw.rect(button_surface, RECTANGLE_COLOR, (0, 0, w, h))
             
-            # Draw the new surface on the screen
             surface.blit(button_surface, (x, y))
             
-            # Change the color of the text if the button is pressed
             if press:
                 text_surface = font.render(text, True, PRESSED_TEXT_COLOR)
             else:
