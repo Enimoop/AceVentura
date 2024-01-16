@@ -36,12 +36,6 @@ BACKGROUND_MENU_SIZE = (700, 600)
 # Définir la position de l'image de fond du menu
 BACKGROUND_MENU_POSITION = (290, 100)
 
-#Marche pas ptn  >:\
-TRANSITION_SPEED = 10  # Change this value to control the transition speed
-TRANSITION_STOP = 100  # Change this value to control where the buttons stop
-TRANSITION_DISTANCE = 1010  # Change this value to control the transition distance
-
-
 # Charger l'image d'arrière-plan
 bbackground_menu = pygame.image.load('asset/backGroudMenu.png')
 bbackground_menu = pygame.transform.scale(bbackground_menu, BACKGROUND_MENU_SIZE)
@@ -63,26 +57,21 @@ background_image = pygame.image.load('asset/backGroundMainMenue.png')
 mainMenuFont = 'font/Crang.ttf'
 font = pygame.font.Font(mainMenuFont, 55)
 
-# Définir si l'animation de transition est en cours
-transitioning = False
+# Variable pour stocker le décalage des boutons
+button_offset = 0
 
 class Button:
-    def __init__(self, text, y, font_path, action=None, x_offset=0):
+    def __init__(self, text, y, font_path, action=None):
         self.text = text
         self.y = y
         self.action = action
         self.font_normal = pygame.font.Font(font_path, FONT_SIZE_NORMAL)
         self.font_zoomed = pygame.font.Font(font_path, FONT_SIZE_ZOOMED)
         text_surface = self.font_normal.render(self.text, True, TEXT_COLOR)
-        self.w, self.h = text_surface.get_size()  
-        self.w += 20  
-        self.h += 20  
-        self.stop = None  
-        self.x = SCREEN_SIZE[0] / 2 - self.w / 2 + x_offset
-        self.initial_x = self.x
-        self.start_x = self.x  
-
-
+        self.w, self.h = text_surface.get_size()  # Get the size of the text
+        self.w += 20  # Add some padding
+        self.h += 20  # Add some padding
+        self.x = SCREEN_SIZE[0] / 2 - self.w / 2  # Center the button
 
     def draw(self, surface, mouse_x, mouse_y, pressed):
         zoom = self.mouse_over_button(mouse_x, mouse_y)
@@ -94,21 +83,10 @@ class Button:
             font = self.font_normal
 
         text_surface = font.render(self.text, True, TEXT_COLOR)
-        self.w, self.h = text_surface.get_size()  
-        self.w += 20  
-        self.h += 20 
-        if transitioning:
-                if self.stop is None:
-                    self.stop = self.start_x + TRANSITION_DISTANCE if self.action == retour else self.start_x - TRANSITION_DISTANCE
-                if (self.action == retour and self.x < self.stop) or (self.action != retour and self.x > self.stop):
-                    self.x += TRANSITION_SPEED if self.action == retour else -TRANSITION_SPEED
-                else:
-                    self.x = self.stop
-
-
-
-
-        
+        self.w, self.h = text_surface.get_size()  # Get the size of the text
+        self.w += 20  # Add some padding
+        self.h += 20  # Add some padding
+        self.x = SCREEN_SIZE[0] / 2 - self.w / 2 - button_offset  # Center the button with offset
 
         def draw_button(text, font, color, surface, x, y, w, h, press):
             # Create a new surface with the same size as the button
@@ -140,41 +118,31 @@ class Button:
 
     def click(self):
         if self.action:
-            self.action()     
-    
+            self.action()
+
+def shift_buttons_left():
+    global button_offset
+    button_offset = 800
+
 def jouer():
     print("Jouer")
 
 def parametres():
-    global transitioning
-    transitioning = True
-    for button in menu_items:
-        button.stop = button.start_x - TRANSITION_DISTANCE  
     print("Paramètres")
-    print("Transitioning: ", transitioning)
+    shift_buttons_left()
 
-    
 def quitter():
     print("Quitter")
     pygame.quit()
     sys.exit()
-    
-def retour():
-    global transitioning
-    transitioning = True
-    for button in menu_items:
-        button.stop = button.start_x + TRANSITION_DISTANCE  
-    print("Retour")
-    print("Transitioning: ", transitioning)
-
 
 # Texte du menu
 menu_items = [
     Button("Jouer", SCREEN_SIZE[1] / 2 - MESSAGE_SPACING, mainMenuFont, jouer),
     Button("Paramètres", SCREEN_SIZE[1] / 2 , mainMenuFont, parametres),
-    Button("Quitter", SCREEN_SIZE[1] / 1.9 + MESSAGE_SPACING, mainMenuFont, quitter),
-    Button("Retour", SCREEN_SIZE[1] / 1.9 + MESSAGE_SPACING, mainMenuFont, retour, x_offset=1000)  
+    Button("Quitter", SCREEN_SIZE[1] / 1.9 + MESSAGE_SPACING, mainMenuFont, quitter)
 ]
+
 # Boucle principale
 while True:
     ecran.fill(RECTANGLE_COLOR)
@@ -184,21 +152,9 @@ while True:
     # Obtenir la position de la souris
     mouse_x, mouse_y = pygame.mouse.get_pos()
 
-    # Dessiner les boutons
     for button in menu_items:
         button.draw(ecran, mouse_x, mouse_y, pygame.mouse.get_pressed()[0])
 
-    # Si l'animation de transition est en cours, déplacez les boutons vers la gauche
-    if transitioning:
-        all_buttons_at_stop = True
-        for button in menu_items:
-            if (button.action == retour and button.x < button.stop) or (button.action != retour and button.x > button.stop):
-                all_buttons_at_stop = False
-                break
-
-        if all_buttons_at_stop:
-            transitioning = False
-            
     # Gérer les événements
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

@@ -57,18 +57,24 @@ background_image = pygame.image.load('asset/backGroundMainMenue.png')
 mainMenuFont = 'font/Crang.ttf'
 font = pygame.font.Font(mainMenuFont, 55)
 
+# Variable pour stocker le décalage des boutons
+button_offset = 0
+
 class Button:
-    def __init__(self, text, y, font_path, action=None):
+    def __init__(self, text, y, font_path, action=None, x_offset=0):
         self.text = text
         self.y = y
         self.action = action
         self.font_normal = pygame.font.Font(font_path, FONT_SIZE_NORMAL)
         self.font_zoomed = pygame.font.Font(font_path, FONT_SIZE_ZOOMED)
         text_surface = self.font_normal.render(self.text, True, TEXT_COLOR)
-        self.w, self.h = text_surface.get_size()  # Get the size of the text
-        self.w += 20  # Add some padding
-        self.h += 20  # Add some padding
-        self.x = SCREEN_SIZE[0] / 2 - self.w / 2  # Center the button
+        self.w, self.h = text_surface.get_size()
+        self.w += 20
+        self.h += 20
+        self.x = SCREEN_SIZE[0] / 2 - self.w / 2
+        self.x_offset = x_offset  # Définir le décalage supplémentaire en x
+
+
 
     def draw(self, surface, mouse_x, mouse_y, pressed):
         zoom = self.mouse_over_button(mouse_x, mouse_y)
@@ -83,7 +89,7 @@ class Button:
         self.w, self.h = text_surface.get_size()  # Get the size of the text
         self.w += 20  # Add some padding
         self.h += 20  # Add some padding
-        self.x = SCREEN_SIZE[0] / 2 - self.w / 2  # Center the button
+        self.x = SCREEN_SIZE[0] / 2 - self.w / 2 - button_offset + self.x_offset
 
         def draw_button(text, font, color, surface, x, y, w, h, press):
             # Create a new surface with the same size as the button
@@ -115,24 +121,33 @@ class Button:
 
     def click(self):
         if self.action:
-            self.action()     
-            
+            self.action()
+
+def shift_buttons_left():
+    global button_offset
+    button_offset = 800
+
 def jouer():
     print("Jouer")
 
 def parametres():
     print("Paramètres")
+    shift_buttons_left()
 
 def quitter():
     print("Quitter")
     pygame.quit()
     sys.exit()
 
+def retour():
+    print("Retour")
+
 # Texte du menu
 menu_items = [
     Button("Jouer", SCREEN_SIZE[1] / 2 - MESSAGE_SPACING, mainMenuFont, jouer),
-    Button("Paramètres", SCREEN_SIZE[1] / 2 , mainMenuFont, parametres),
-    Button("Quitter", SCREEN_SIZE[1] / 1.9 + MESSAGE_SPACING, mainMenuFont, quitter)
+    Button("Paramètres", SCREEN_SIZE[1] / 2, mainMenuFont, parametres),
+    Button("Quitter", SCREEN_SIZE[1] / 1.9 + MESSAGE_SPACING, mainMenuFont, quitter),
+    Button("Retour", SCREEN_SIZE[1] / 1.9 + MESSAGE_SPACING, mainMenuFont, retour, x_offset=800)
 ]
 
 # Boucle principale
