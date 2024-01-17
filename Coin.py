@@ -10,7 +10,7 @@ class Coin(GameObject):
         self.reset()
 
     def reset(self):
-        self.rect.x = Coin.last_coin_x + 280
+        self.rect.x = Coin.last_coin_x + 300
         Coin.last_coin_x = self.rect.x
         self.randomize_y()
 
