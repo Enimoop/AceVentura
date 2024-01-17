@@ -158,6 +158,10 @@ class InGame():
 
                 caillou.rect.x = -1000
 
+        if self.perso.over:
+            print("ici")
+            self.run = False
+
         for coin in self.coin_group:
             if self.perso.rect.colliderect(coin.rect):
                 print("+1 point")

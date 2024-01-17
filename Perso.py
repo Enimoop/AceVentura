@@ -20,8 +20,10 @@ class Perso(GameObject):
         self.frame_delays = [200, 200, 200]
         self.last_frame_change = py.time.get_ticks()
         self.game_over = False
-        self.list_over = ["assets/AceVenturaCharacter_3.png", "assets/AceVenturaCharacter_dead.png"]
+        self.list_over = ["assets/AceVenturaCharacter_3.png", "assets/AceVenturaCharacter_dead.png",
+                          "assets/AceVenturaCharacter_dead.png"]
         self.index_over = 0
+        self.over = False
 
     #Blinking function
     def start_blinking(self):
@@ -38,8 +40,8 @@ class Perso(GameObject):
             self.image = py.image.load(self.list_over[self.index_over]).convert_alpha()
             self.image = py.transform.scale(self.image, (self.rect.width, self.rect.height))
             self.last_frame_change = current_time + 1500
-            if self.index_over == 2:
-                py.quit()
+            if self.index_over == 1:
+                self.over = True
             self.index_over += 1
 
 
