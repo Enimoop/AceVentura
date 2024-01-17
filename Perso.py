@@ -20,9 +20,10 @@ class Perso(GameObject):
         self.frame_delays = [200, 200, 200]
         self.last_frame_change = py.time.get_ticks()
         self.game_over = False
-        self.list_over = ["assets/alligator.png", "assets/bush.png"]
+        self.list_over = ["assets/AceVenturaCharacter_3.png", "assets/AceVenturaCharacter_dead.png"]
         self.index_over = 0
 
+    #Blinking function
     def start_blinking(self):
             self.is_blinking = True
             self.blinking_timer = py.time.get_ticks()
@@ -32,21 +33,24 @@ class Perso(GameObject):
     def update(self):
         current_time = py.time.get_ticks()
 
+        #Animation Game over
         if current_time - self.last_frame_change >= self.frame_duration and self.game_over:
             self.image = py.image.load(self.list_over[self.index_over]).convert_alpha()
             self.image = py.transform.scale(self.image, (self.rect.width, self.rect.height))
             self.last_frame_change = current_time + 1500
             if self.index_over == 2:
                 py.quit()
-            self.index_over +=1
+            self.index_over += 1
 
+
+        #Animation du perso
         elif current_time - self.last_frame_change >= self.frame_duration:
             self.image = py.image.load(self.image_paths[self.current_frame_index]).convert_alpha()
             self.image = py.transform.scale(self.image, (self.rect.width, self.rect.height))
             self.last_frame_change = current_time
             self.current_frame_index = (self.current_frame_index + 1) % len(self.image_paths)
 
-
+        #Gestion Blinking
         if self.is_blinking:
             elapsed_time = current_time - self.blinking_timer
             if elapsed_time < self.blinking_duration:
