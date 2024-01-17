@@ -13,14 +13,14 @@ class Rock(GameObject):
         self.reset()
 
     def reset(self):
-        self.rect.x = Rock.last_rock_x + 195
+        self.rect.x = Rock.last_rock_x + 280
         Rock.last_rock_x = self.rect.x
         self.randomize_y()
 
     def randomize_y(self):
         random_pos = random.choice([1, 2, 3])
         if random_pos == 1:
-            self.rect.y = 280
+            self.rect.y = 300
         if random_pos == 2:
             self.rect.y = 400
         if random_pos == 3:
@@ -28,7 +28,7 @@ class Rock(GameObject):
 
     def update(self):
         #Augmenter la vitesse
-        speed = 25
+        speed = 17
         self.rect.x -= speed
         if self.rect.right < 0:
             self.reset()
