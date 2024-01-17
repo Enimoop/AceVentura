@@ -28,12 +28,6 @@ FrameWidth = 1280
 dt = 0
 player_pos = 2
 
-rock_spawn_timer = 0
-rock_spawn_interval = 10
-
-coin_spawn_timer = 0
-coin_spawn_interval = 10
-
 spawn_timer = 0
 spawn_interval = 10
 
@@ -64,8 +58,6 @@ frame_index = 0
 
 # ADD SPRITES TO GROUP
 all_sprites_group.add(perso)
-
-
 
 pause_duration = 200
 last_move_time = py.time.get_ticks()
@@ -134,7 +126,7 @@ while run:
         while True:
                 choice = random.randint(1, 5)
                 if choice == 1 or choice == 2 or choice == 3:
-                    type_rock = random.randint(1,3)
+                    type_rock = random.randint(1, 3)
                     if type_rock == 1:
                         generate_random_objects(caillou_group, Rock, "assets/rocks (1).PNG", 50, 50)
                     elif type_rock == 2:
@@ -144,10 +136,15 @@ while run:
                     spawn_timer = 0
 
                 if choice == 4:
-                    if random.randint(1,2) == 1:
-                        path = "assets/coin.png"
+                    bonus = random.randint(1, 4)
+                    if bonus == 1:
+                        path = "assets/BleuDiamond.png"
+                    elif bonus == 2:
+                        path = "assets/GreenDiamond.png"
+                    elif bonus == 3:
+                        path = "assets/PurpelDiamond.png"
                     else:
-                        path = "assets/strawberry.png"
+                        path = "assets/RedDiamond.png"
                     generate_random_objects(coin_group, Coin, path, 50, 50)
                     spawn_timer = 0
 
@@ -155,13 +152,12 @@ while run:
                     pass
                 break
 
-
-
-
+    #GESTION DES COLLISIONS
     for caillou in caillou_group:
         if perso.rect.colliderect(caillou.rect):
             print("Collision!")
             perso.lives -= 1
+
             if perso.lives <= 0:
                 print("Game Over! You ran out of lives.")
                 perso.game_over = True
@@ -176,12 +172,15 @@ while run:
         if perso.rect.colliderect(coin.rect):
             print("+1 point")
             perso.points += 1
-
             coin.rect.x = -1000
 
+
+    #AFFICHAGE VIE ET POINT
     if perso.lives > 0:
-        lives_text = font.render(f"Lives: {perso.lives}", True, text_color)
-        screen.blit(lives_text, (FrameWidth - 150, 20))
+        heart = py.image.load("assets/heart.png").convert_alpha()
+        heart = py.transform.scale(heart, (30, 30))
+        for i in range(perso.lives):
+            screen.blit(heart, (FrameWidth - (70 + 30*i), 20))
 
         points_text = font.render(f"Points: {perso.points}", True, text_color)
         screen.blit(points_text, (FrameWidth - 150, 50))

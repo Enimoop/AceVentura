@@ -24,10 +24,10 @@ class Coin(GameObject):
             self.rect.y = 550
 
     def update(self):
-        speed = 17
+        #Augmenter la vitesse
+        speed = 18
         self.rect.x -= speed
         if self.rect.right < 0:
-            #self.rect.x = self
             self.reset()
             self.randomize_y()
 
